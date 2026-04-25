@@ -8,6 +8,8 @@ public class PlayerController_1P : MonoBehaviour
 
     private float timer = 0;
     private Rigidbody2D rb;
+    [SerializeField] private float minY;
+    [SerializeField] private float maxY;
 
     private void Start()
     {
@@ -36,6 +38,11 @@ public class PlayerController_1P : MonoBehaviour
         }
     }
 
+    private void FixedUpdate()
+    {
+        LimitPosition();
+    }
+
     private void Shoot(Vector2 knockbackDir)
     {
         Instantiate(bulletPrefub, firePoint.position, transform.rotation);
@@ -46,5 +53,23 @@ public class PlayerController_1P : MonoBehaviour
             rb.linearVelocity = Vector2.zero;
             rb.AddForce(knockbackDir * 5f, ForceMode2D.Impulse);
         }
+    }
+
+    private void LimitPosition()
+    {
+        Vector3 pos = transform.position;
+
+        if (pos.y > maxY)
+        {
+            pos.y = maxY;
+            rb.linearVelocity = Vector2.zero;
+        }
+        else if (pos.y < minY)
+        {
+            pos.y = minY;
+            rb.linearVelocity = Vector2.zero;
+        }
+
+        transform.position = pos;
     }
 }
